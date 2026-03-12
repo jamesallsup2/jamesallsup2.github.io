@@ -122,11 +122,31 @@ body {
   color: var(--accent);
   box-shadow: 0 0 20px rgba(129, 255, 255, 0.3);
   animation: logoPulse 2200ms ease-in-out infinite;
+  flex-shrink: 0;               /* prevent squishing next to nav */
 }
+
+/* Mobile tweaks */
+@media (max-width: 600px) {
+  .logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    font-size: 0.7rem;          /* keep text legible but compact */
+    box-shadow: 0 0 12px rgba(129, 255, 255, 0.25);
+    animation-duration: 2600ms; /* slightly calmer animation */
+  }
+}
+
 
 @keyframes logoPulse {
   0%, 100% { box-shadow: 0 0 14px rgba(129, 255, 255, 0.28); }
   50% { box-shadow: 0 0 26px rgba(129, 255, 255, 0.6); }
+}
+
+@media only screen and (max-width: 768px) {
+    .navbar {
+        display: none !important; /* Hides the entire navbar on mobile */
+    }
 }
 
 nav a {
@@ -203,6 +223,8 @@ main {
   cursor: pointer;
   display: inline-flex;
   align-items: center;
+    touch-action: manipulation;
+  min-height: 44px;
   gap: 8px;
   box-shadow: var(--shadow-soft);
   transition:
@@ -446,55 +468,101 @@ main {
 /* Responsive */
 
 @media (max-width: 768px) {
-  .site-header {
-    padding-inline: 5vw;
-  }
-
-  nav a {
-    margin-left: 12px;
-    font-size: 0.85rem;
-  }
-
   .hero {
-    grid-template-columns: minmax(0, 1fr);
-    margin-top: 32px;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    text-align: center;
   }
 
-  main {
-    padding-inline: 5vw;
+  .hero-text p {
+    margin: 0 auto 20px;
+    max-width: 85%;
+  }
+
+  .skills-grid, .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .card, .skill-block {
+    padding: 14px 16px;
+  }
+
+  .section {
+    margin: 48px auto;
+  }
+
+  .timeline {
+    padding-left: 18px;
+  }
+
+  h1, h2, h3 {
+    line-height: 1.3;
+    word-break: break-word;
   }
 }
 
-    .location-pill {
-      display: inline-flex;
-      align-items: center;
-      margin-left: auto; 
-      gap: 0.4rem;
-      padding: 0.25rem 0.6rem;
-      border-radius: 999px;
-      background: #f3f4f6;
-      color: #111827;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: 0.9rem;
-      border: 1px solid #e5e7eb;
-    }
 
-    .location-icon {
-      width: 18px;
-      height: 18px;
-      display: inline-block;
-    }
+.location-pill {
+  display: inline-flex;
+  align-items: center;
+  margin-left: auto;
+  gap: 0.4rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: #f3f4f6;
+  color: #111827;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 0.9rem;
+  border: 1px solid #e5e7eb;
+  white-space: nowrap;          /* prevent awkward wrapping */
+  max-width: 100%;              /* avoid overflow */
+}
 
-    .location-icon svg {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
+/* Icon and label */
+.location-icon {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  flex-shrink: 0;               /* don't let icon squish */
+}
 
-    .location-label {
-      font-weight: 500;
-      letter-spacing: 0.01em;
-    }
+.location-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.location-label {
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  overflow: hidden;             /* gracefully truncate on tiny screens */
+  text-overflow: ellipsis;
+}
+
+/* Mobile tweaks */
+@media (max-width: 600px) {
+  .location-pill {
+    padding: 0.2rem 0.5rem;
+    font-size: 0.75rem;
+    gap: 0.3rem;
+  }
+
+  .location-icon {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* Option A: hide text on very narrow viewports, show icon only */
+  /* Uncomment if you want this behavior:
+  .location-label {
+    display: none;
+  }
+  */
+
+  /* Option B: shorten text via a CSS-only trick by using a shorter label */
+  /* e.g. replace inner text “New York, USA” in HTML with just “NY, USA” */
+}
+
 </style>
 </head>
 <body>
@@ -502,7 +570,7 @@ main {
     <div class="logo">JA</div>
 
 
-    <nav>
+    <nav class="navbar">
       <a href="#about">About</a>
       <a href="#experience">Experience</a>
       <a href="#skills">Skills</a>
